@@ -134,6 +134,18 @@ gulp.task('newpattern', function() {
         .pipe(gulp.dest('src/patterns/'));
 });
 
+gulp.task('clean-git', function() {
+    gulp.src('.git')
+        .pipe($.clean());
+});
+
+gulp.task('init', ['clean-git'], function() {
+    gulp.src('*')
+        .pipe($.git.init())
+        .pipe($.git.add())
+        .pipe($.git.comiit('init'));
+});
+
 // gulp.task('push', ['commit'], function(){
 //     var branch = argv.b;
 //     $.git.push('origin', branch!==undefined?branch:'develop').on('error', errorHandler);
