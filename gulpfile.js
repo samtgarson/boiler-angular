@@ -17,7 +17,7 @@ var mario = function(err) {
 
 gulp.task('browser-sync', function() {
     return browserSync({
-      proxy: 'staging-app.gojimo.net:8888',
+      proxy: '', // ====================================== EDIT
       open: false,
       minify: false,
       files: ['build/script.js'],

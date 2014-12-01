@@ -1,7 +1,7 @@
 {
   "repository": {
     "type": "git",
-    "url": "http://github.com/educationapps/gojimo-web.git"
+    "url": "http://github.com/" // =========== EDIT
   },
   "devDependencies": {
     "bower": "^1.3.12",

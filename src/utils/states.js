@@ -2,7 +2,7 @@ angular.module('states', [])
 
     // When app is first run;
     // Checks if user is logged in with Cookies
-    .run (function($rootScope, Gojimo, $state, $cookieStore, prevState, auth, Facebook, $location) {
+    .run (function($rootScope, $state) {
 
     })
     .config(function($stateProvider, $stickyStateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
