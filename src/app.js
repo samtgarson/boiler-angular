@@ -1,5 +1,3 @@
-// document.addEventListener("touchstart", function(){}, true);
-
 angular.module('app', [
     // App
     'ui.router',
