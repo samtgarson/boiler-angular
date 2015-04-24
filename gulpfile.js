@@ -14,7 +14,7 @@ var jsFiles = mainBowerFiles().concat(['src/*/**/*.js', 'src/templates.js', 'src
 // Run a local web server
 gulp.task('connect', function() {
   $.connect.server({
-    root: './'
+    root: [__dirname]
   });
 });
 
