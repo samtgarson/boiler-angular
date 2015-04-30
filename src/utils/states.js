@@ -34,7 +34,7 @@ angular.module('states', [])
         // Function to generate template urls
         function templater (page, child) {
             if (angular.isUndefined(child)) child = page;
-            return 'features/' + page + '/_' + child + '.html';
+            return 'src/features/' + page + '/_' + child + '.html';
         }
 
         $stateProvider
