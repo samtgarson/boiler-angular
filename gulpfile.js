@@ -9,7 +9,14 @@ var gulp            = require('gulp'),
 
 
 // Define main 
-var jsFiles = mainBowerFiles().concat(['src/*/**/*.js', 'src/templates.js', 'src/app.js']);
+var jsexp = new RegExp(/^.*\.js$/);
+var cssexp = new RegExp(/^.*\.css$/);
+var jsFiles = mainBowerFiles({filter: jsexp}).concat(['src/*/**/*.js', 'src/templates.js', 'src/app.js']);
+var cssFiles = mainBowerFiles({filter: cssexp}).concat(['src/**/*.scss']);
+
+gulp.task('print', function() {
+    console.log(jsFiles);
+});
 
 // Run a local web server
 gulp.task('connect', function() {
@@ -30,12 +37,35 @@ gulp.task('browser-sync', function() {
     });
 });
 
-
-// Generate angular templates
-gulp.task('tpl', function () {
+// Generate HTML templates
+gulp.task('tpl', ['slim'], function () {
     gulp.src("src/**/*.html")
         .pipe($.angularTemplatecache({'standalone': true}))
         .pipe(gulp.dest('./src/'));
+});
+
+// Generate slim templates
+gulp.task('slim', function () {
+    gulp.src("src/**/*.slim")
+        .pipe($.plumber({
+            errorHandler: $.notify.onError("<%= error.message %>")}))
+        .pipe($.slim({
+            pretty: true,
+            options: "attr_list_delims={'(' => ')', '[' => ']'}"
+        }))
+        .pipe(gulp.dest('./src/'));
+});
+
+// Generate index slim
+gulp.task('slim_index', function () {
+    gulp.src("index.slim")
+        .pipe($.plumber({
+            errorHandler: $.notify.onError("<%= error.message %>")}))
+        .pipe($.slim({
+            pretty: true,
+            options: ":attr_list_delims={'(' => ')', '[' => ']'}"
+        }))
+        .pipe(gulp.dest('./'));
 });
 
 // Javascript build
@@ -67,7 +97,7 @@ gulp.task('jsDev', function() {
 
 // SASS build
 gulp.task('sass', function () {
-    gulp.src('src/**/*.scss')
+    gulp.src(cssFiles)
         .pipe($.cssGlobbing({
             extensions: ['.css', '.scss']
         }))
@@ -83,7 +113,7 @@ gulp.task('sass', function () {
 
 // SASS Development
 gulp.task('sassDev', function () {
-    gulp.src('src/**/*.scss')
+    gulp.src(cssFiles)
         .pipe($.plumber({
             errorHandler: $.notify.onError("<%= error.message %>")}))
         .pipe($.cssGlobbing({
@@ -103,7 +133,8 @@ gulp.task('sassDev', function () {
 // Set up watchers
 gulp.task('default', ['connect', 'sassDev', 'tpl', 'jsDev', 'browser-sync'], function() {
     gulp.watch('./src/**/*.scss', ['sassDev']);
-    gulp.watch('src/**/*.html', ['tpl']);
+    gulp.watch('src/**/*.slim', ['tpl']);
+    gulp.watch('index.slim', ['slim_index']);
     gulp.watch(jsFiles, ['jsDev']);
 });
 
