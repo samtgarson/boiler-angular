@@ -11,7 +11,7 @@ var gulp            = require('gulp'),
 // Define main 
 var jsexp = new RegExp(/^.*\.js$/);
 var cssexp = new RegExp(/^.*\.css$/);
-var jsFiles = mainBowerFiles({filter: jsexp}).concat(['src/*/**/*.js', 'src/templates.js', 'src/app.js']);
+var jsFiles = mainBowerFiles({filter: jsexp}).concat(['src/templates.js', 'src/*/**/*.js', 'src/app.js']);
 var cssFiles = mainBowerFiles({filter: cssexp}).concat(['src/**/*.scss']);
 
 gulp.task('print', function() {
@@ -21,8 +21,8 @@ gulp.task('print', function() {
 // Run a local web server
 gulp.task('connect', function() {
   $.connect.server({
-    root: [__dirname],
-    fallback: 'index.html'
+    root: ['dist'],
+    fallback: 'dist/index.html'
   });
 });
 
@@ -32,20 +32,12 @@ gulp.task('browser-sync', function() {
       proxy: 'localhost:8080',
       open: false,
       minify: false,
-      files: ['*.html', 'build/script.js'],
+      files: ['dist/index.html', 'dist/script.js'],
       injectChanges: true
     });
 });
-
-// Generate HTML templates
-gulp.task('tpl', ['slim'], function () {
-    gulp.src("src/**/*.html")
-        .pipe($.angularTemplatecache({'standalone': true}))
-        .pipe(gulp.dest('./src/'));
-});
-
 // Generate slim templates
-gulp.task('slim', function () {
+gulp.task('tpl', function () {
     gulp.src("src/**/*.slim")
         .pipe($.plumber({
             errorHandler: $.notify.onError("<%= error.message %>")}))
@@ -53,6 +45,7 @@ gulp.task('slim', function () {
             pretty: true,
             options: "attr_list_delims={'(' => ')', '[' => ']'}"
         }))
+        .pipe($.angularTemplatecache({'standalone': true}))
         .pipe(gulp.dest('./src/'));
 });
 
@@ -65,7 +58,7 @@ gulp.task('slim_index', function () {
             pretty: true,
             options: ":attr_list_delims={'(' => ')', '[' => ']'}"
         }))
-        .pipe(gulp.dest('./'));
+        .pipe(gulp.dest('./dist'));
 });
 
 // Javascript build
@@ -75,7 +68,7 @@ gulp.task('js', function() {
         // .pipe($.angularFilesort())
         .pipe($.uglify())
         .pipe($.concat('script.js'))
-        .pipe(gulp.dest('build/'));
+        .pipe(gulp.dest('dist/'));
 });
 
 // Javascript build development
@@ -90,7 +83,7 @@ gulp.task('jsDev', function() {
             }
         }))
         .pipe($.concat('script.js'))
-        .pipe(gulp.dest('build/'));
+        .pipe(gulp.dest('dist/'));
 });
 
 
@@ -108,7 +101,7 @@ gulp.task('sass', function () {
             cascade: false
         }))
         .pipe($.minifyCss())
-        .pipe(gulp.dest('build/'));
+        .pipe(gulp.dest('dist/'));
 });
 
 // SASS Development
@@ -125,7 +118,7 @@ gulp.task('sassDev', function () {
             browsers: ['last 2 versions'],
             cascade: false
         }))
-        .pipe(gulp.dest('build/'))
+        .pipe(gulp.dest('dist/'))
         .pipe($.filter('*.css'))
         .pipe(browserSync.reload({stream:true}));
 });
@@ -139,14 +132,7 @@ gulp.task('default', ['connect', 'slim_index', 'sassDev', 'tpl', 'jsDev', 'brows
 });
 
 // Build JS and SASS
-gulp.task('build', ['js', 'sass']);
-
-// Build then add and commit
-gulp.task('commit', ['build'], function(){
-    gulp.src(['build/script.js', 'build/style.css'])
-        .pipe($.git.add())
-        .pipe($.git.commit('Build'));
-});
+gulp.task('build', ['tpl', 'slim_index', 'js', 'sass']);
 
 // Create new feature with --name
 gulp.task('newfeature', function() {

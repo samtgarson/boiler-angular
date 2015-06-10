@@ -1,5 +1,5 @@
 angular.module('<%= name%>', [])
-    .directive('go<%= bigname%>', function(){
+    .directive('<%= bigname%>', function(){
         return {
         restrict: 'E',
         scope: {

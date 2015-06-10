@@ -1,13 +1,14 @@
 angular.module('app', [
-    // App
+    // Vendor
     'ui.router',
-    'templates',
-    'breakpointApp',
     'ct.ui.router.extras',
     'ngAnimate',
+    'ngResource',
     'ngSanitize',
+
+    // App
+    'templates',
     'states',
-//    'facebook',
     'services',
 
     // Features
@@ -21,8 +22,7 @@ angular.module('app', [
     })
 
     .controller('appController', function ($scope) {
-        var $this = this;
-        this.hello = 'hello world';
+        $scope.hello = 'hello world';
         
         
     });
