@@ -21,8 +21,8 @@ gulp.task('print', function() {
 // Run a local web server
 gulp.task('connect', function() {
   $.connect.server({
-    root: ['dist'],
-    fallback: 'dist/index.html'
+    root: ['build'],
+    fallback: 'build/index.html'
   });
 });
 
@@ -32,7 +32,7 @@ gulp.task('browser-sync', function() {
       proxy: 'localhost:8080',
       open: false,
       minify: false,
-      files: ['dist/index.html', 'dist/script.js'],
+      files: ['build/index.html', 'build/script.js'],
       injectChanges: true
     });
 });
@@ -58,7 +58,7 @@ gulp.task('slim_index', function () {
             pretty: true,
             options: ":attr_list_delims={'(' => ')', '[' => ']'}"
         }))
-        .pipe(gulp.dest('./dist'));
+        .pipe(gulp.dest('./build'));
 });
 
 // Javascript build
@@ -68,7 +68,7 @@ gulp.task('js', function() {
         // .pipe($.angularFilesort())
         .pipe($.uglify())
         .pipe($.concat('script.js'))
-        .pipe(gulp.dest('dist/'));
+        .pipe(gulp.dest('build/'));
 });
 
 // Javascript build development
@@ -83,7 +83,7 @@ gulp.task('jsDev', function() {
             }
         }))
         .pipe($.concat('script.js'))
-        .pipe(gulp.dest('dist/'));
+        .pipe(gulp.dest('build/'));
 });
 
 
@@ -101,7 +101,7 @@ gulp.task('sass', function () {
             cascade: false
         }))
         .pipe($.minifyCss())
-        .pipe(gulp.dest('dist/'));
+        .pipe(gulp.dest('build/'));
 });
 
 // SASS Development
@@ -118,7 +118,7 @@ gulp.task('sassDev', function () {
             browsers: ['last 2 versions'],
             cascade: false
         }))
-        .pipe(gulp.dest('dist/'))
+        .pipe(gulp.dest('build/'))
         .pipe($.filter('*.css'))
         .pipe(browserSync.reload({stream:true}));
 });
