@@ -24,6 +24,9 @@ angular.module('app', [
     .controller('appController', function ($scope) {
         $scope.hello = 'hello world';
         
-        
+        $scope.title = "title";
+        $scope.$on('$stateChangeSuccess', function(e, toState) {
+            $scope.title = toState.name?$filter('titlecase')(toState.name) + ' | title':'title';
+        });
     });
 
