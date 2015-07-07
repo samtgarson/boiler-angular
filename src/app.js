@@ -10,6 +10,7 @@ angular.module('app', [
     'templates',
     'states',
     'services',
+    'filters',
 
     // Features
     'home'
@@ -21,7 +22,7 @@ angular.module('app', [
 
     })
 
-    .controller('appController', function ($scope) {
+    .controller('appController', function ($scope, $filter) {
         $scope.hello = 'hello world';
         
         $scope.title = "title";
