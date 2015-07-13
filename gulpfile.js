@@ -62,7 +62,7 @@ gulp.task('slim_index', function () {
 });
 
 // Javascript build
-gulp.task('js', function() {
+gulp.task(js:build, function() {
     gulp.src(jsFiles)
         .pipe($.ngAnnotate())
         // .pipe($.angularFilesort())
@@ -72,7 +72,7 @@ gulp.task('js', function() {
 });
 
 // Javascript build development
-gulp.task('jsDev', function() {
+gulp.task('js:development', function() {
     gulp.src(jsFiles)
         // .pipe($.angularFilesort())
         .pipe($.uglify({
@@ -89,7 +89,7 @@ gulp.task('jsDev', function() {
 
 
 // SASS build
-gulp.task('sass', function () {
+gulp.task(sass:build, function () {
     gulp.src(cssFiles)
         .pipe($.cssGlobbing({
             extensions: ['.css', '.scss']
@@ -105,7 +105,7 @@ gulp.task('sass', function () {
 });
 
 // SASS Development
-gulp.task('sassDev', function () {
+gulp.task('sass:development', function () {
     gulp.src(cssFiles)
         .pipe($.plumber({
             errorHandler: $.notify.onError("<%= error.message %>")}))
@@ -124,15 +124,15 @@ gulp.task('sassDev', function () {
 });
 
 // Set up watchers
-gulp.task('default', ['connect', 'slim_index', 'sassDev', 'tpl', 'jsDev', 'browser-sync'], function() {
-    gulp.watch('./src/**/*.scss', ['sassDev']);
+gulp.task('default', ['connect', 'slim_index', 'sass:development', 'tpl', 'js:development', 'browser-sync'], function() {
+    gulp.watch('./src/**/*.scss', ['sass:development']);
     gulp.watch('src/**/*.slim', ['tpl']);
     gulp.watch('index.slim', ['slim_index']);
-    gulp.watch(jsFiles, ['jsDev']);
+    gulp.watch(jsFiles, ['js:development']);
 });
 
 // Build JS and SASS
-gulp.task('build', ['tpl', 'slim_index', 'js', 'sass']);
+gulp.task('build', ['tpl', 'slim_index', js:build, sass:build]);
 
 // Create new feature with --name
 gulp.task('newfeature', function() {
@@ -145,31 +145,4 @@ gulp.task('newfeature', function() {
             path.basename = '_' + name;
         }))
         .pipe(gulp.dest('src/features/'));
-});
-
-// Create new pattern with --name
-gulp.task('newpattern', function() {
-    var name = argv.name;
-    gulp.src('src/patterns/_pattern/*')
-        .pipe($.clone())
-        .pipe($.template({'name': name, 'bigname': name.charAt(0).toUpperCase() + name.slice(1)}))
-        .pipe($.rename(function(path) {
-            path.dirname = name;
-            path.basename = '_' + name;
-        }))
-        .pipe(gulp.dest('src/patterns/'));
-});
-
-// Clear the git repo
-gulp.task('clean-git', function() {
-    gulp.src('.git')
-        .pipe($.clean());
-});
-
-// Make new repo with initial commit
-gulp.task('init', ['clean-git'], function() {
-    gulp.src('*')
-        .pipe($.git.init())
-        .pipe($.git.add())
-        .pipe($.git.comiit('init'));
 });
