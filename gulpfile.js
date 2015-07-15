@@ -62,7 +62,7 @@ gulp.task('slim_index', function () {
 });
 
 // Javascript build
-gulp.task(js:build, function() {
+gulp.task('js:build', function() {
     gulp.src(jsFiles)
         .pipe($.ngAnnotate())
         // .pipe($.angularFilesort())
@@ -89,7 +89,7 @@ gulp.task('js:development', function() {
 
 
 // SASS build
-gulp.task(sass:build, function () {
+gulp.task('sass:build', function () {
     gulp.src(cssFiles)
         .pipe($.cssGlobbing({
             extensions: ['.css', '.scss']
@@ -132,7 +132,7 @@ gulp.task('default', ['connect', 'slim_index', 'sass:development', 'tpl', 'js:de
 });
 
 // Build JS and SASS
-gulp.task('build', ['tpl', 'slim_index', js:build, sass:build]);
+gulp.task('build', ['tpl', 'slim_index', 'js:build', 'sass:build']);
 
 // Create new feature with --name
 gulp.task('newfeature', function() {
