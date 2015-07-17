@@ -3,8 +3,8 @@ angular.module('app', [
     'ui.router',
     'ct.ui.router.extras',
     'ngAnimate',
-    'ngResource',
     'ngSanitize',
+    'ngCachedResource',
 
     // App
     'templates',
