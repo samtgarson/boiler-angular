@@ -1,5 +1,6 @@
 angular.module('services', [])
     // Some convenience services
+    .constant('Endpoing', 'http://google.com')
     .factory('Api', function($cachedResource, Endpoint) {
         return function(key) {
             key = key.join? key.join('/'):key;
