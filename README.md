@@ -17,7 +17,7 @@ gulp newfeature --name featurename
 ```
 *will create new feature directory with name ```featurename```*
 
-## Build
+## Build & Push
 ``` 
 gulp build
 ```
